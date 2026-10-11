@@ -7,7 +7,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,8 +26,8 @@ import java.util.TreeSet;
 @JeiPlugin
 public final class JeiAttributePlugin implements IModPlugin {
     @Override
-    public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(JeiAttribute.MOD_ID, "jei_plugin");
+    public Identifier getPluginUid() {
+        return Identifier.fromNamespaceAndPath(JeiAttribute.MOD_ID, "jei_plugin");
     }
 
     @Override
@@ -51,16 +51,16 @@ public final class JeiAttributePlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        Map<ResourceLocation, List<ItemStack>> sourceItems = new TreeMap<>();
+        Map<Identifier, List<ItemStack>> sourceItems = new TreeMap<>();
 
         boolean curiosLoaded = ModList.get().isLoaded("curios");
         for (Item item : BuiltInRegistries.ITEM) {
             ItemStack stack = item.getDefaultInstance();
-            Set<ResourceLocation> attributeIds = new TreeSet<>();
+            Set<Identifier> attributeIds = new TreeSet<>();
 
             for (EquipmentSlot slot : EquipmentSlot.values()) {
                 stack.forEachModifier(slot, (Holder<Attribute> attribute, AttributeModifier ignoredModifier) -> {
-                    ResourceLocation id = BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
+                    Identifier id = BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
                     if (id != null) {
                         attributeIds.add(id);
                     }
@@ -71,13 +71,13 @@ public final class JeiAttributePlugin implements IModPlugin {
                 attributeIds.addAll(CuriosAttributeSupport.getAttributeIds(stack));
             }
 
-            for (ResourceLocation attributeId : attributeIds) {
+            for (Identifier attributeId : attributeIds) {
                 sourceItems.computeIfAbsent(attributeId, ignored -> new ArrayList<>()).add(stack.copy());
             }
         }
 
         List<AttributePage> pages = new ArrayList<>();
-        for (ResourceLocation attributeId : BuiltInRegistries.ATTRIBUTE.keySet().stream().sorted().toList()) {
+        for (Identifier attributeId : BuiltInRegistries.ATTRIBUTE.keySet().stream().sorted().toList()) {
             pages.add(new AttributePage(
                     new AttributeIngredient(attributeId),
                     sourceItems.getOrDefault(attributeId, List.of())));

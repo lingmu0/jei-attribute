@@ -3,13 +3,13 @@ package net.xuwu.jeiattribute.jei;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.client.resources.language.I18n;
 
-public record AttributeIngredient(ResourceLocation id) {
+public record AttributeIngredient(Identifier id) {
     public static final Codec<AttributeIngredient> CODEC =
-            ResourceLocation.CODEC.xmap(AttributeIngredient::new, AttributeIngredient::id);
+            Identifier.CODEC.xmap(AttributeIngredient::new, AttributeIngredient::id);
 
     public static AttributeIngredient of(Attribute attribute) {
         return new AttributeIngredient(BuiltInRegistries.ATTRIBUTE.getKey(attribute));

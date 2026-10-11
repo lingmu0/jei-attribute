@@ -3,7 +3,7 @@ package net.xuwu.jeiattribute.jei;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class AttributeIngredientHelper implements IIngredientHelper<AttributeIngredient> {
     @Override
@@ -17,13 +17,12 @@ public final class AttributeIngredientHelper implements IIngredientHelper<Attrib
     }
 
     @Override
-    @SuppressWarnings("removal")
-    public String getUniqueId(AttributeIngredient ingredient, UidContext context) {
-        return ingredient.id().toString();
+    public Object getUid(AttributeIngredient ingredient, UidContext context) {
+        return ingredient.id();
     }
 
     @Override
-    public ResourceLocation getResourceLocation(AttributeIngredient ingredient) {
+    public Identifier getIdentifier(AttributeIngredient ingredient) {
         return ingredient.id();
     }
 
